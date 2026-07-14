@@ -580,6 +580,7 @@ function pageHTML(){
     '<div class="invtitle">INVOICE</div>'+
     '<div class="metarow">'+
       '<div class="meta">'+
+        '<div><span class="k">Lease Number</span><span class="v">'+esc(g("contract"))+'</span></div>'+
         '<div><span class="k">Description</span><span class="v">'+esc(g("desc"))+'</span></div>'+
       '</div>'+
     '</div>'+
@@ -663,12 +664,14 @@ function drawPage(pdf, m){
 
   /* meta left */
   F(12);
-  pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text("Description",P(53),P(metaY),{baseline:"top"});
-  pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(g("desc")||"-"),P(53+140),P(metaY),{baseline:"top"});
+  pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text("Lease Number",P(53),P(metaY),{baseline:"top"});
+  pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(g("contract")||"-"),P(53+140),P(metaY),{baseline:"top"});
+  pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text("Description",P(53),P(metaY+18),{baseline:"top"});
+  pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(g("desc")||"-"),P(53+140),P(metaY+18),{baseline:"top"});
 
   /* charges table */
   var rows=f.rows, nR=rows.length;
-  var tY=metaY+30, hH=38, rH = nR<=1?46 : (nR<=6?34:26), tblH=hH+nR*rH;
+  var tY=metaY+44, hH=38, rH = nR<=1?46 : (nR<=6?34:26), tblH=hH+nR*rH;
   var colWs=[120,238,90,84,78,78], cx=[], acc=53, k; for(k=0;k<colWs.length;k++){cx.push(acc);acc+=colWs[k];}
   fill(NAVYBAR); pdf.rect(P(53),P(tY),P(688),P(hH),"F");
   txt(WHITE); pdf.setFont("helvetica","bold"); F(10.4); var pad=10;
