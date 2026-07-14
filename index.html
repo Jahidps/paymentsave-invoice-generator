@@ -94,11 +94,11 @@ tbody td.charge { color: #1C63B0; }
 .pfooter .fmail { left: 72%; }
 .pfooter svg { flex: none; }
 
-.idbox { border-collapse: collapse; font-size: 12px; width: 312px; }
-.idbox td.k { width: 178px; }
-.idbox td { border: 1px solid #cdd5e0; padding: 5px 12px; }
+.idbox { border-collapse: collapse; font-size: 11.5px; width: 360px; }
+.idbox td.k { width: 150px; white-space: nowrap; }
+.idbox td { border: 1px solid #cdd5e0; padding: 4px 12px; }
 .idbox td.k { color: #5B6675; }
-.idbox td.v { font-weight: bold; text-align: right; }
+.idbox td.v { font-weight: bold; text-align: right; white-space: nowrap; }
 .tofrom { display: flex; justify-content: space-between; gap: 40px; margin: 22px 0 4px; }
 .tofrom .blk { font-size: 11.5px; line-height: 1.55; }
 .tofrom .blk.from { text-align: right; }
@@ -567,6 +567,7 @@ function pageHTML(){
       '<table class="idbox">'+
         '<tr><td class="k">Company Reg No.</td><td class="v">10477496</td></tr>'+
         '<tr><td class="k">VAT Reg No.</td><td class="v">265371690</td></tr>'+
+        '<tr><td class="k">Lease No.</td><td class="v">'+esc(g("contract"))+'</td></tr>'+
         '<tr><td class="k">Invoice No.</td><td class="v">'+esc(g("invno"))+'</td></tr>'+
         '<tr><td class="k">Invoice Date</td><td class="v">'+esc(g("invdate"))+'</td></tr>'+
       '</table>'+
@@ -579,7 +580,6 @@ function pageHTML(){
     '<div class="invtitle">INVOICE</div>'+
     '<div class="metarow">'+
       '<div class="meta">'+
-        '<div><span class="k">Lease Number</span><span class="v">'+esc(g("contract"))+'</span></div>'+
         '<div><span class="k">Description</span><span class="v">'+esc(g("desc"))+'</span></div>'+
       '</div>'+
     '</div>'+
@@ -627,21 +627,21 @@ function drawPage(pdf, m){
   pdf.addImage(LOGO,"PNG",P(53),P(45),P(173),P(42));
 
   /* id box top-right */
-  var bx=481, bw=260, klw=160, by=45, rh=20;
-  var idrows=[["Company Reg No.","10477496"],["VAT Reg No.","265371690"],["Invoice No.",g("invno")],["Invoice Date",g("invdate")]];
+  var bx=441, bw=300, klw=150, by=45, rh=18;
+  var idrows=[["Company Reg No.","10477496"],["VAT Reg No.","265371690"],["Lease No.",g("contract")],["Invoice No.",g("invno")],["Invoice Date",g("invdate")]];
   draw(BORD); pdf.setLineWidth(P(0.8));
   for(var rr=0;rr<=idrows.length;rr++){ pdf.line(P(bx),P(by+rr*rh),P(bx+bw),P(by+rr*rh)); }
   pdf.line(P(bx),P(by),P(bx),P(by+idrows.length*rh));
   pdf.line(P(bx+klw),P(by),P(bx+klw),P(by+idrows.length*rh));
   pdf.line(P(bx+bw),P(by),P(bx+bw),P(by+idrows.length*rh));
-  F(11);
+  F(10.5);
   idrows.forEach(function(r,i){ var yy=by+i*rh+rh/2;
     pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text(r[0],P(bx+6),P(yy),{baseline:"middle"});
     pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(r[1]||"-"),P(bx+klw+6),P(yy),{baseline:"middle"});
   });
 
   /* hr */
-  var hrY=134; fill(NAVYTXT); pdf.rect(P(53),P(hrY),P(688),P(2.5),"F");
+  var hrY=143; fill(NAVYTXT); pdf.rect(P(53),P(hrY),P(688),P(2.5),"F");
 
   /* to / from */
   var tfY=hrY+22;
@@ -663,14 +663,12 @@ function drawPage(pdf, m){
 
   /* meta left */
   F(12);
-  pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text("Lease Number",P(53),P(metaY),{baseline:"top"});
-  pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(g("contract")||"-"),P(53+140),P(metaY),{baseline:"top"});
-  pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text("Description",P(53),P(metaY+18),{baseline:"top"});
-  pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(g("desc")||"-"),P(53+140),P(metaY+18),{baseline:"top"});
+  pdf.setFont("helvetica","normal"); txt(LABEL); pdf.text("Description",P(53),P(metaY),{baseline:"top"});
+  pdf.setFont("helvetica","bold"); txt(BODY); pdf.text(clean(g("desc")||"-"),P(53+140),P(metaY),{baseline:"top"});
 
   /* charges table */
   var rows=f.rows, nR=rows.length;
-  var tY=metaY+44, hH=38, rH = nR<=1?46 : (nR<=6?34:26), tblH=hH+nR*rH;
+  var tY=metaY+30, hH=38, rH = nR<=1?46 : (nR<=6?34:26), tblH=hH+nR*rH;
   var colWs=[120,238,90,84,78,78], cx=[], acc=53, k; for(k=0;k<colWs.length;k++){cx.push(acc);acc+=colWs[k];}
   fill(NAVYBAR); pdf.rect(P(53),P(tY),P(688),P(hH),"F");
   txt(WHITE); pdf.setFont("helvetica","bold"); F(10.4); var pad=10;
